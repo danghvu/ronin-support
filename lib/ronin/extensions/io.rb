@@ -41,4 +41,40 @@ class IO
     buffer
   end
 
+  #
+  # interate to read and write from multiple pipes, return when one of them break
+  # 
+  # @param [Hash] pipes
+  #   list of pipes e.g. {STDIN=>process, process=>STDOUT}
+  #
+  # @return [nil]
+  #
+  # @api public
+  #
+  def IO.interact(pipes)
+    loop do
+      ready = IO.select(pipes.keys)
+
+      ready[0].each do |r|
+        begin
+          pipes[r].write(r.read_timeout())
+        rescue ::EOFError, Errno::EPIPE
+          return
+        end
+      end
+    end
+  end
+
+
+  #
+  # interact with STDIN/STDOUT as terminal in non-blocking behavior
+  # 
+  # @return [nil]
+  #
+  # @api public
+  #
+  def interact() 
+    IO.interact({STDIN=>self, self=>STDOUT})
+  end
+
 end
