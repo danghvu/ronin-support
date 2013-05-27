@@ -39,14 +39,16 @@ class BasicSocket
   #
   # @param [String] mesg
   #   The message to send
+  # @param [String] newline
+  #   The optional string to append to the message
   #
   # @return [Integer]
   #   The number of bytes sent
   #
   # @api public
   #
-  def sendline(mesg)
-    return self.send(mesg + "\r\n", 0)
+  def sendline(mesg, newline="\n")
+    return self.send(mesg + newline, 0)
   end
 
 end
