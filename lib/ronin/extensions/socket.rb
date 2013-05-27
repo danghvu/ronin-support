@@ -17,14 +17,36 @@
 # along with Ronin Support.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-require 'ronin/extensions/meta'
-require 'ronin/extensions/string'
-require 'ronin/extensions/regexp'
-require 'ronin/extensions/file'
-require 'ronin/extensions/ip_addr'
-require 'ronin/extensions/resolv'
-require 'ronin/extensions/kernel'
-require 'ronin/extensions/socket'
+class BasicSocket
 
-require 'hexdump/extensions'
-require 'uri/query_params/extensions'
+  #
+  # send message with flags=0
+  #
+  # @param [String] mesg
+  #   The message to send
+  #
+  # @return [String]
+  #   The number of bytes sent
+  #
+  # @api public
+  #
+  def sendall(mesg)
+    return self.send(mesg, 0)
+  end
+
+  #
+  # send message and a newline with flags=0
+  #
+  # @param [String] mesg
+  #   The message to send
+  #
+  # @return [String]
+  #   The number of bytes sent
+  #
+  # @api public
+  #
+  def sendline(mesg)
+    return self.send(mesg + "\r\n", 0)
+  end
+
+end
