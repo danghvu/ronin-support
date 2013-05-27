@@ -17,15 +17,28 @@
 # along with Ronin Support.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-require 'ronin/extensions/meta'
-require 'ronin/extensions/string'
-require 'ronin/extensions/regexp'
-require 'ronin/extensions/file'
-require 'ronin/extensions/ip_addr'
-require 'ronin/extensions/resolv'
-require 'ronin/extensions/kernel'
-require 'ronin/extensions/io'
-require 'ronin/extensions/socket'
+class IO
 
-require 'hexdump/extensions'
-require 'uri/query_params/extensions'
+  #
+  # read as much as possible until timeout
+  #
+  # @param [Double] timeout
+  #   time to wait for timeout in second
+  # 
+  # @return [String] the read message
+  #
+  # @api public
+  #
+  def read_timeout(timeout=0.5)
+    buffer = ""
+  
+    begin
+      buffer << self.read_nonblock(1024)
+    rescue IO::WaitReadable
+      retry if IO.select([self], nil, nil, timeout)
+    end
+
+    buffer
+  end
+
+end
