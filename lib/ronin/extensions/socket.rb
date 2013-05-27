@@ -20,12 +20,12 @@
 class BasicSocket
 
   #
-  # send message with flags=0
+  # send message using BasicSocket#send with flags=0
   #
   # @param [String] mesg
   #   The message to send
   #
-  # @return [String]
+  # @return [Integer]
   #   The number of bytes sent
   #
   # @api public
@@ -35,12 +35,12 @@ class BasicSocket
   end
 
   #
-  # send message and a newline with flags=0
+  # send message and a newline using BasicSocket#send with flags=0
   #
   # @param [String] mesg
   #   The message to send
   #
-  # @return [String]
+  # @return [Integer]
   #   The number of bytes sent
   #
   # @api public
