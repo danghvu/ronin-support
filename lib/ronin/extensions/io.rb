@@ -83,7 +83,7 @@ class IO
 
       ready[0].each do |r|
         begin
-          pipes[r].write(r.read_timeout())
+          pipes[r].write_timeout(r.read_timeout())
         rescue ::EOFError, Errno::EPIPE
           return
         end
