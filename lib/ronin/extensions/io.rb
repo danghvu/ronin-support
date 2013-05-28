@@ -23,7 +23,7 @@ class IO
   # read as much as possible until timeout
   #
   # @param [Double] timeout
-  #   time to wait for timeout in second
+  #   time to wait for timeout in second, default is 0.5
   # 
   # @return [String] the read message
   #
@@ -39,6 +39,32 @@ class IO
     end
 
     buffer
+  end
+
+  #
+  # write as much as possible until timout
+  # 
+  # @param [String] mesg
+  #   message to send
+  #
+  # @param [Double] timeout
+  #   time to wait for timeout in second, default is 0.5
+  # 
+  # @return [Integer] number of bytes sent
+  #
+  # @api public
+  #
+  def write_timeout(mesg, timeout=0.5)
+    written = 0
+    begin
+      until written == mesg.length do
+        written += self.write_nonblock(mesg[written..-1])
+      end
+    rescue IO::WaitWritable
+      retry if IO.select(nil, [self], nil, timeout)
+    end    
+
+    written
   end
 
   #
